@@ -1,0 +1,49 @@
+#!/bin/sh
+
+generator=$1
+toolchain=$2
+
+if [ "$generator" = "" ]; then
+	echo Please use "./build.sh GENERATOR [TOOLCHAIN]"
+	echo Examples:
+	echo For GCC and Make: ./build.sh "Unix Makefiles"
+	echo For GCC and Ninja: ./build.sh Ninja
+	echo For LLVM and Make: ./build.sh "Unix Makefiles" llvm
+	echo For LLVM and Ninja: ./build.sh Ninja llvm
+fi
+
+app=
+if [ "$generator" = "Ninja" ]; then
+	app="ninja"
+elif [ "$generator" = "Unix Makefiles" ]; then
+	app="make"
+else
+	echo Compile manually please.
+fi
+
+toolchainCmds=
+if [ "$toolchain" = "llvm" ]; then
+	echo Using LLVM
+	export CC="clang"
+	export CXX="clang++"
+	toolchainCmds="-D_CMAKE_TOOLCHAIN_PREFIX=llvm-"
+fi
+
+cd "${0%/*}"
+
+mkdir -p "builddir-$generator-$toolchain-64"
+cd "builddir-$generator-$toolchain-64"
+# from: https://stackoverflow.com/questions/6481005/how-to-obtain-the-number-of-cpus-cores-in-linux-from-the-command-line
+cores=$([[ $(uname) = 'Darwin' ]] && sysctl -n hw.logicalcpu_max || lscpu -p | egrep -v '^#' | wc -l)
+cmake -G "${generator}" .. ${toolchainCmds} && ${app} -j${cores} || exit
+cd ..
+
+mkdir -p "builddir-$generator-$toolchain-32"
+cd "builddir-$generator-$toolchain-32"
+# from: https://stackoverflow.com/questions/6481005/how-to-obtain-the-number-of-cpus-cores-in-linux-from-the-command-line
+cores=$([[ $(uname) = 'Darwin' ]] && sysctl -n hw.logicalcpu_max || lscpu -p | egrep -v '^#' | wc -l)
+cmake -G "${generator}" -DFORCE_32BIT:BOOL=ON .. ${toolchainCmds} && ${app} -j${cores} || exit
+cd ..
+
+cp "builddir-$generator-$toolchain-32/libHookey32.so" out-lib
+cp "builddir-$generator-$toolchain-64/libHookey64.so" out-lib
