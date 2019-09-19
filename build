@@ -34,7 +34,7 @@ cd "${0%/*}"
 
 # from: https://stackoverflow.com/questions/6481005/how-to-obtain-the-number-of-cpus-cores-in-linux-from-the-command-line
 local cores=
-[[ $(uname) = 'Darwin' ]] \
+[[ "$(uname)" == "Darwin" ]] \
     && cores="$(sysctl -n hw.logicalcpu_max)" \
     || cores="$(lscpu -p | egrep -v '^#' | wc -l)"
 
