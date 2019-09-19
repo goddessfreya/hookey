@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/zsh -x
 
-generator=$1
-toolchain=$2
+local generator=$1
+local toolchain=$2
 
-if [ "$generator" = "" ]; then
+if [[ "$generator" == "" ]]; then
 	echo Please use "./build.sh GENERATOR [TOOLCHAIN]"
 	echo Examples:
 	echo For GCC and Make: ./build.sh "Unix Makefiles"
@@ -12,17 +12,18 @@ if [ "$generator" = "" ]; then
 	echo For LLVM and Ninja: ./build.sh Ninja llvm
 fi
 
-app=
-if [ "$generator" = "Ninja" ]; then
+local app=
+if [[ "$generator" == "Ninja" ]]; then
 	app="ninja"
-elif [ "$generator" = "Unix Makefiles" ]; then
+elif [[ "$generator" == "Unix Makefiles" ]]; then
 	app="make"
 else
-	echo Compile manually please.
+	echo State generator.
+    exit
 fi
 
-toolchainCmds=
-if [ "$toolchain" = "llvm" ]; then
+local toolchainCmds=
+if [[ "$toolchain" == "llvm" ]]; then
 	echo Using LLVM
 	export CC="clang"
 	export CXX="clang++"
@@ -31,19 +32,31 @@ fi
 
 cd "${0%/*}"
 
-mkdir -p "builddir-$generator-$toolchain-64"
-cd "builddir-$generator-$toolchain-64"
 # from: https://stackoverflow.com/questions/6481005/how-to-obtain-the-number-of-cpus-cores-in-linux-from-the-command-line
-cores=$([[ $(uname) = 'Darwin' ]] && sysctl -n hw.logicalcpu_max || lscpu -p | egrep -v '^#' | wc -l)
-cmake -G "${generator}" .. ${toolchainCmds} && ${app} -j${cores} || exit
-cd ..
+local cores=
+[[ $(uname) = 'Darwin' ]] \
+    && cores="$(sysctl -n hw.logicalcpu_max)" \
+    || cores="$(lscpu -p | egrep -v '^#' | wc -l)"
 
-mkdir -p "builddir-$generator-$toolchain-32"
-cd "builddir-$generator-$toolchain-32"
-# from: https://stackoverflow.com/questions/6481005/how-to-obtain-the-number-of-cpus-cores-in-linux-from-the-command-line
-cores=$([[ $(uname) = 'Darwin' ]] && sysctl -n hw.logicalcpu_max || lscpu -p | egrep -v '^#' | wc -l)
-cmake -G "${generator}" -DFORCE_32BIT:BOOL=ON .. ${toolchainCmds} && ${app} -j${cores} || exit
-cd ..
+function build() {
+    mkdir -p "$1"
+    cd "$1"
+    cmake -G "${generator}" .. ${toolchainCmds} || exit
+    ${app} -j${cores} || exit
+    mkdir -p "../out-lib/$2"
+    cp "libHookey.so" "../out-lib/$2/libHookey.so"
+    cp "subhook/libsubhook.so" "../out-lib/$2/libsubhook.so"
+    cd ..
+}
 
-cp "builddir-$generator-$toolchain-32/libHookey32.so" out-lib
-cp "builddir-$generator-$toolchain-64/libHookey64.so" out-lib
+export CFLAGS="$CFLAGS -g"
+export CXXFLAGS="$CXXFLAGS -g"
+
+build "builddir-$generator-$toolchain-64" "64"
+
+export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export CFLAGS="$CFLAGS -m32"
+export CXXFLAGS="$CXXFLAGS -m32"
+export LDFLAGS="$LDFLAGS -m32"
+
+build "builddir-$generator-$toolchain-32" "32"

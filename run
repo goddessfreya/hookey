@@ -1,3 +1,6 @@
-#!/bin/zsh
-./build Ninja gcc 
-LD_PRELOAD="$(pwd)/out-lib/libHookey32.so $(pwd)/out-lib/libHookey64.so" ~/.local/share/Steam/steamapps/common/Europa\ Universalis\ IV/eu4
+#!/bin/zsh -x
+./build Ninja gcc || exit
+
+LD_LIBRARY_PATH="$(pwd)/out-lib/64/:$(pwd)/out-lib/32/:${LD_LIBRARY_PATH}" \
+    LD_PRELOAD="libHookey.so libHookey.so" \
+    ~/.local/share/Steam/steamapps/common/Europa\ Universalis\ IV/eu4
