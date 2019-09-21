@@ -2,12 +2,14 @@
 
 Enables all the EU4 DLCs. Like Creamapi but just for linux and EU4.
 
-First:
+# 1- First:
 ```
 $ git submodule update --init --recursive
 
 $ echo "<directory where EU4 is placed>" > .eu4_location
 ```
+
+# 2a- Steam Users
 
 If you bought the game via steam, make sure steam is running in the background.
 
@@ -22,6 +24,8 @@ Then run this script:
 $ ./install_copy
 ```
 
+# 2b- Non-steam Users
+
 Otherwise, if your installation already comes with all the DLCs (as in, you got
 it from [here](https://cs.rin.ru/forum/viewtopic.php?f=22&t=54230)) just run
 this script:
@@ -30,7 +34,11 @@ this script:
 $ ./install
 ```
 
+# 3- Waiting...
+
 Wait for the launcher to appear, closing it when it does.
+
+# 4- Enjoy!
 
 Now in the future, you can start the game with this command, even if steam is
 not running:
