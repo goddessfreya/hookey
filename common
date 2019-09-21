@@ -1,0 +1,15 @@
+#!/bin/zsh -x
+
+if [[ -f .launcher_version ]]; then
+    export LAUNCHER_VERSION="$(cat .launcher_version)"
+    export LAUNCHER_ROOT="$HOME/.paradoxlauncher"
+    export LAUNCHER_API_LOC="${LAUNCHER_ROOT}/${LAUNCHER_VERSION}/resources/app.asar.unpacked/dist/main"
+else
+    export LAUNCHER_VERSION=
+    export LAUNCHER_ROOT=
+    export LAUNCHER_API_LOC=
+fi
+
+[[ -f .eu4_location ]] \
+    && export EU_ROOT="$(cat .eu4_location)" \
+    || export EU_ROOT=

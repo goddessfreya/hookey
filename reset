@@ -1,0 +1,32 @@
+#!/bin/zsh -x
+
+source ./common
+
+uninstall_at() {
+    [[ -f "$1/libsteam_api.so.old" ]] \
+        && mv "$1/libsteam_api.so"{.old,}
+
+    [[ -d "$1/steam_settings" ]] \
+        && rm "$1/steam_settings" -rf
+}
+
+[[ -d "${LAUNCHER_API_LOC}" ]] \
+    && uninstall_at "${LAUNCHER_API_LOC}"
+
+if [[ -d "${EU_ROOT}" ]]; then
+    uninstall_at "${EU_ROOT}"
+
+    if [[ -d "${EU_ROOT}/dlc.old" ]]; then
+        [[ -d "${EU_ROOT}/dlc" ]] \
+            && rm "${EU_ROOT}/dlc" -rf
+        mv "${EU_ROOT}/dlc"{.old,}
+    fi
+fi
+
+[[ -d "${LAUNCHER_API_LOC}" ]] \
+    && rm -rf "$HOME/.paradoxlauncher" 
+
+[[ -f .launcher_version ]] \
+    && rm .launcher_version 
+
+exit 0

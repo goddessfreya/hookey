@@ -1,0 +1,9 @@
+#!/bin/zsh -x
+
+source ./common
+if [[ ! -d "${EU_ROOT}" ]]; then
+    echo "Must place eu4 root in .eu4_location"
+    exit 1
+fi
+cd "${EU_ROOT}"
+tr '\n' '\0' < ../files_to_add_exec | xargs -0 chmod +x

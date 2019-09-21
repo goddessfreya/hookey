@@ -1,0 +1,15 @@
+#!/bin/zsh -x
+
+if [[ ! -d dlc ]]; then
+    echo "Place dlcs in ./dlc folder (might have to create folder manually)"
+    exit
+fi
+
+./install || exit $?
+source ./common
+
+[[ -d "${EU_ROOT}/dlc" ]] \
+    && mv "${EU_ROOT}/dlc"{,.old}
+
+mkdir "${EU_ROOT}/dlc/"
+cp -r dlc/* "${EU_ROOT}/dlc/"

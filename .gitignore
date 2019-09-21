@@ -1,2 +1,5 @@
-builddir-*
-out-lib
+dlc/*
+.launcher_version
+.eu4_location
+.eu4_location_steam
+eu4_local

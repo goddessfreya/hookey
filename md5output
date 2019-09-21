@@ -1,0 +1,3 @@
+#!/bin/zsh -x
+
+md5sum "goldberg_emulator/libsteam_api.so" "$1/libsteam_api.so"*

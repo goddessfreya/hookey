@@ -1,0 +1,18 @@
+#!/bin/zsh -x
+
+source ./common
+
+[[ -d "${LAUNCHER_API_LOC}" ]] \
+    && rm -rf "$HOME/.paradoxlauncher" 
+
+[[ -f .launcher_version ]] \
+    && rm .launcher_version 
+
+./run
+
+basename "$(echo "$HOME/.paradoxlauncher/launcher-"*)" > .launcher_version
+source ./common
+
+[[ ! -d "${LAUNCHER_API_LOC}" ]] && exit 1
+
+exit 0

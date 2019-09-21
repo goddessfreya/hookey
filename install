@@ -1,0 +1,32 @@
+#!/bin/zsh -x
+
+source ./common
+if [[ ! -d "${EU_ROOT}" ]]; then
+    echo "Must place eu4 root in .eu4_location"
+    exit 1
+fi
+
+pushd goldberg_emulator
+make -j4 || exit $?
+[[ ! -f libsteam_api.so ]] && exit 1
+popd
+
+./reset || exit $?
+./chmod_files || exit $?
+./launcher_prep || exit $?
+
+source ./common
+
+install_at() {
+    ./md5output "$1"
+
+    mv "$1/libsteam_api.so"{,.old}
+
+    cp goldberg_emulator/libsteam_api.so "$1/libsteam_api.so"
+    cp steam_settings "$1/" -r
+
+    ./md5output "$1"
+}
+
+install_at "${LAUNCHER_API_LOC}"
+install_at "${EU_ROOT}"

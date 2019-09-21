@@ -1,6 +1,6 @@
 #!/bin/zsh -x
-./build Ninja gcc || exit
 
-LD_LIBRARY_PATH="$(pwd)/out-lib/64/:$(pwd)/out-lib/32/:${LD_LIBRARY_PATH}" \
-    LD_PRELOAD="libHookey.so libHookey.so" \
-    ~/.local/share/Steam/steamapps/common/Europa\ Universalis\ IV/eu4
+local EU_ROOT="$(cat .eu4_location)"
+
+cd "${EU_ROOT}"
+LD_PRELOAD="/usr/lib/libc.so.6" ./dowser
