@@ -10,11 +10,13 @@ source ./common
 
 ./run
 
-sleep 5
-basename "$(echo "$HOME/.paradoxlauncher/launcher-"*)" > apps/eu4/.launcher_version
-
-source ./common
-fail_if_not_populated LAUNCHER_API_LOC
-[[ ! -d "${LAUNCHER_API_LOC}" ]] && exit 1
+while true do
+    echo "Sleeping for 10 seconds..."
+    sleep 10
+    basename "$(echo "$HOME/.paradoxlauncher/launcher-"*)" > ./apps/eu4/.launcher_version
+    source ./common
+    [[ -d "${LAUNCHER_API_LOC}" ]] && break
+    echo "Launcher not found, retrying."
+done
 
 exit 0

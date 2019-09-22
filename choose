@@ -1,6 +1,6 @@
 #!/bin/zsh -x
 
-echo "$1" > .install
+echo "$1" > ./.install
 
 source ./common
 

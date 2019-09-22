@@ -1,4 +1,4 @@
 #!/bin/zsh
 
-touch .installs
-echo "$1 $2" >> .installs
+touch ./.installs
+echo "$1 $2" >> ./.installs
