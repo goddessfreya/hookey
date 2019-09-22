@@ -38,7 +38,7 @@ If you bought the game via steam, make sure steam is running in the background.
 You won't need steam functional after the install.
 
 Proceed to download the appropriate DLC pack and extract it into the 
-"./apps/<game name>/dlc" folder. You might have to create the folder 
+`./apps/<game name>/dlc` folder. You might have to create the folder 
 if it is not present.
 
 Then run this script:
