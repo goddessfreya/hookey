@@ -1,9 +1,21 @@
 #!/bin/zsh -x
 
 source ./common
-if [[ ! -d "${EU_ROOT}" ]]; then
-    echo "Must place eu4 root in .eu4_location"
-    exit 1
+fail_if_not_populated APP_ROOT APP_MARK_EXEC_LOC
+
+if [[ ! -f "$APP_MARK_EXEC_LOC" ]]; then
+    pushd "${APP_ROOT}"
+        find . -type f -print0 \
+            | xargs -0 file \
+            | grep "executable\|ELF\|LSB" \
+            | cut -d":" -f1 > "$APP_MARK_EXEC_LOC"
+    popd
 fi
-cd "${EU_ROOT}"
-tr '\n' '\0' < ../files_to_add_exec | xargs -0 chmod +x
+
+source ./common
+fail_if_not_populated APP_MARK_EXEC
+
+cd "${APP_ROOT}"
+echo "$APP_MARK_EXEC" | xargs chmod +x
+
+exit 0

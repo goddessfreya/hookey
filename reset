@@ -10,23 +10,17 @@ uninstall_at() {
         && rm "$1/steam_settings" -rf
 }
 
-[[ -d "${LAUNCHER_API_LOC}" ]] \
-    && uninstall_at "${LAUNCHER_API_LOC}"
+for OVERRIDE_DIR in "${OVERRIDE_DIRS[@]}"; do
+    [[ -d "${OVERRIDE_DIR}" ]] \
+        && uninstall_at "${OVERRIDE_DIR}"
+done
 
-if [[ -d "${EU_ROOT}" ]]; then
-    uninstall_at "${EU_ROOT}"
-
-    if [[ -d "${EU_ROOT}/dlc.old" ]]; then
-        [[ -d "${EU_ROOT}/dlc" ]] \
-            && rm "${EU_ROOT}/dlc" -rf
-        mv "${EU_ROOT}/dlc"{.old,}
-    fi
+if [[ -d "${APP_ROOT}" && -d "${APP_ROOT}/dlc.old" ]]; then
+    [[ -d "${APP_ROOT}/dlc" ]] \
+        && rm "${APP_ROOT}/dlc" -rf
+    mv "${APP_ROOT}/dlc"{.old,}
 fi
 
-[[ -d "${LAUNCHER_API_LOC}" ]] \
-    && rm -rf "$HOME/.paradoxlauncher" 
-
-[[ -f .launcher_version ]] \
-    && rm .launcher_version 
+"./apps/${APP}/override_undo"
 
 exit 0

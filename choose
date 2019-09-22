@@ -1,0 +1,7 @@
+#!/bin/zsh -x
+
+echo "$1" > .install
+
+source ./common
+
+echo "$INSTALL_STR"

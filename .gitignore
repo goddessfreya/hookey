@@ -1,5 +1,5 @@
-dlc/*
-.launcher_version
-.eu4_location
-.eu4_location_steam
-eu4_local
+apps/*/dlc/*
+.install
+.installs
+*_local
+apps/eu4/.launcher_version

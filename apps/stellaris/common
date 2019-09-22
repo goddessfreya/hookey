@@ -1,0 +1,11 @@
+#!/bin/zsh -x
+
+var_keys+=(OVERRIDE_DIRS GOLDBERG_BUILD)
+
+vars[OVERRIDE_DIRS]=$'("${APP_ROOT}")'
+var_types[OVERRIDE_DIRS]="eval"
+var_deps[OVERRIDE_DIRS]=$'(APP_ROOT)'
+
+vars[GOLDBERG_BUILD]=$'"release"'
+var_types[GOLDBERG_BUILD]="eval"
+var_deps[GOLDBERG_BUILD]=$'()'

@@ -1,0 +1,14 @@
+./steam_api64.dll
+./LightFX.dll
+./dbghelp.dll
+./AutoClientScriptOvernight.py
+./AutoClientScript.py
+./stellaris
+./libpops_api.so
+./pops_api.dll
+./crash_reporter/binaries/CrashReporter
+./crash_reporter/binaries/pops_api.dll
+./crash_reporter/binaries/d3dcompiler_47.dll
+./crash_reporter/binaries/CrashReporter.exe
+./libsteam_api.so
+./stellaris.exe

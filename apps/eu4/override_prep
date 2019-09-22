@@ -6,13 +6,15 @@ source ./common
     && rm -rf "$HOME/.paradoxlauncher" 
 
 [[ -f .launcher_version ]] \
-    && rm .launcher_version 
+    && rm apps/eu4/.launcher_version 
 
 ./run
 
-basename "$(echo "$HOME/.paradoxlauncher/launcher-"*)" > .launcher_version
-source ./common
+sleep 5
+basename "$(echo "$HOME/.paradoxlauncher/launcher-"*)" > apps/eu4/.launcher_version
 
+source ./common
+fail_if_not_populated LAUNCHER_API_LOC
 [[ ! -d "${LAUNCHER_API_LOC}" ]] && exit 1
 
 exit 0

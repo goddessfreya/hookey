@@ -1,15 +1,17 @@
 #!/bin/zsh -x
 
 if [[ ! -d dlc ]]; then
-    echo "Place dlcs in ./dlc folder (might have to create folder manually)"
+    echo "Place dlcs in ./apps/{appname}/dlc folder (might have to create folder manually)"
     exit
 fi
 
 ./install || exit $?
 source ./common
 
-[[ -d "${EU_ROOT}/dlc" ]] \
-    && mv "${EU_ROOT}/dlc"{,.old}
+fail_if_not_populated APP APP_ROOT
 
-mkdir "${EU_ROOT}/dlc/"
-cp -r dlc/* "${EU_ROOT}/dlc/"
+[[ -d "${APP_ROOT}/dlc" ]] \
+    && mv "${APP_ROOT}/dlc"{,.old}
+
+mkdir "${APP_ROOT}/dlc/"
+cp -r "apps/${APP}/dlc/"* "${APP_ROOT}/dlc/"

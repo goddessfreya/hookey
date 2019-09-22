@@ -1,6 +1,6 @@
 #!/bin/zsh -x
 
-local EU_ROOT="$(cat .eu4_location)"
+source ./common
+fail_if_not_populated APP
 
-cd "${EU_ROOT}"
-LD_PRELOAD="/usr/lib/libc.so.6" ./dowser
+"./apps/${APP}/run"

@@ -1,0 +1,23 @@
+#!/bin/zsh -x
+
+var_keys+=(LAUNCHER_VERSION LAUNCHER_ROOT LAUNCHER_API_LOC OVERRIDE_DIRS GOLDBERG_BUILD)
+
+vars[LAUNCHER_VERSION]="./apps/eu4/.launcher_version"
+var_types[LAUNCHER_VERSION]="file"
+var_deps[LAUNCHER_VERSION]=$'()'
+
+vars[LAUNCHER_ROOT]=$'"$HOME/.paradoxlauncher"'
+var_types[LAUNCHER_ROOT]="eval"
+var_deps[LAUNCHER_ROOT]=$'()'
+
+vars[LAUNCHER_API_LOC]=$'"${LAUNCHER_ROOT}/${LAUNCHER_VERSION}/resources/app.asar.unpacked/dist/main"'
+var_types[LAUNCHER_API_LOC]="eval"
+var_deps[LAUNCHER_API_LOC]=$'(LAUNCHER_ROOT LAUNCHER_VERSION)'
+
+vars[OVERRIDE_DIRS]=$'("${LAUNCHER_API_LOC}" "${APP_ROOT}")'
+var_types[OVERRIDE_DIRS]="eval"
+var_deps[OVERRIDE_DIRS]=$'(LAUNCHER_API_LOC APP_ROOT)'
+
+vars[GOLDBERG_BUILD]=$'"release"'
+var_types[GOLDBERG_BUILD]="eval"
+var_deps[GOLDBERG_BUILD]=$'()'

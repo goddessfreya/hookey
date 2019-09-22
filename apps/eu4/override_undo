@@ -1,0 +1,5 @@
+#!/bin/zsh -x
+
+[[ -f apps/eu4/.launcher_version ]] \
+    && rm apps/eu4/.launcher_version 
+

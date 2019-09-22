@@ -1,21 +1,20 @@
 #!/bin/zsh -x
 
 source ./common
-if [[ ! -d "${EU_ROOT}" ]]; then
-    echo "Must place eu4 root in .eu4_location"
-    exit 1
-fi
+fail_if_not_populated APP APP_ROOT GOLDBERG_BUILD
 
 pushd goldberg_emulator
-make -j4 || exit $?
+make clean -j4 || exit $?
+make -j4 "$GOLDBERG_BUILD" || exit $?
 [[ ! -f libsteam_api.so ]] && exit 1
 popd
 
 ./reset || exit $?
 ./chmod_files || exit $?
-./launcher_prep || exit $?
+"./apps/${APP}/override_prep" || exit $?
 
 source ./common
+fail_if_not_populated OVERRIDE_DIRS
 
 install_at() {
     ./md5output "$1"
@@ -23,10 +22,12 @@ install_at() {
     mv "$1/libsteam_api.so"{,.old}
 
     cp goldberg_emulator/libsteam_api.so "$1/libsteam_api.so"
-    cp steam_settings "$1/" -r
+    cp "./apps/${APP}/steam_settings" "$1/" -r
 
     ./md5output "$1"
 }
 
-install_at "${LAUNCHER_API_LOC}"
-install_at "${EU_ROOT}"
+for OVERRIDE_DIR in "${OVERRIDE_DIRS[@]}"; do
+    [[ -d "${OVERRIDE_DIR}" ]] \
+        && install_at "${OVERRIDE_DIR}"
+done

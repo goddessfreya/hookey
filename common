@@ -1,15 +1,93 @@
 #!/bin/zsh -x
 
-if [[ -f .launcher_version ]]; then
-    export LAUNCHER_VERSION="$(cat .launcher_version)"
-    export LAUNCHER_ROOT="$HOME/.paradoxlauncher"
-    export LAUNCHER_API_LOC="${LAUNCHER_ROOT}/${LAUNCHER_VERSION}/resources/app.asar.unpacked/dist/main"
-else
-    export LAUNCHER_VERSION=
-    export LAUNCHER_ROOT=
-    export LAUNCHER_API_LOC=
+var_keys=(
+    INSTALLS
+    INSTALL
+    INSTALL_STR
+    APP
+    APP_ROOT
+    APP_MARK_EXEC_LOC
+    APP_MARK_EXEC
+)
+
+declare -A var_types=(
+    [INSTALLS]="file"
+    [INSTALL]="file"
+    [INSTALL_STR]="eval"
+    [APP]="eval"
+    [APP_ROOT]="eval"
+    [APP_MARK_EXEC_LOC]="eval"
+    [APP_MARK_EXEC]="file"
+)
+
+
+declare -A vars=(
+    [INSTALLS]=$'".installs"'
+    [INSTALL]=$'".install"'
+    [INSTALL_STR]=$'"$(echo "$INSTALLS" | head -n"$(( $INSTALL + 0 ))" | tail -n1)"'
+    [APP]=$'"$(echo "$INSTALL_STR" | cut -d" " -f1)"'
+    [APP_ROOT]=$'"$(echo "$INSTALL_STR" | cut -d" " -f2-)"'
+    [APP_MARK_EXEC_LOC]=$'"$(pwd)/apps/${APP}/executables"'
+    [APP_MARK_EXEC]=$'"$APP_MARK_EXEC_LOC"'
+)
+
+declare -A var_deps=(
+    [INSTALLS]=$'()'
+    [INSTALL]=$'()'
+    [INSTALL_STR]=$'(INSTALLS INSTALL)'
+    [APP]=$'(INSTALL_STR)'
+    [APP_ROOT]=$'(INSTALL_STR)'
+    [APP_MARK_EXEC_LOC]=$'(APP)'
+    [APP_MARK_EXEC]=$'(APP_MARK_EXEC_LOC)'
+)
+
+
+declare -A vars_done=()
+
+populate() {
+    for key in "${var_keys[@]}"; do
+        eval "local this_deps=${var_deps[$key]}"
+        for dep in "${this_deps[@]}"; do 
+            [[ "${vars_done[$dep]}" != "1" ]] \
+                && continue 2
+        done
+
+        local var_type="${var_types[$key]}"
+        local var="${vars[$key]}"
+        if [[ "$var_type" == "file" ]]; then
+            eval "local file=$var"
+            if [[ -f "$file" ]]; then
+                export $key="$(cat "$file")"
+                vars_done[$key]=1
+            else
+                export $key=
+            fi
+        elif [[ "$var_type" == "eval" ]]; then
+            eval "export $key=$var"
+            vars_done[$key]=1
+        fi
+    done
+}
+
+populate
+
+if [[ "$APP" != "" ]]; then
+    if [[ ! -d "./apps/${APP}" ]]; then
+        echo "invalid app name"
+        exit 1
+    fi
+        
+    source "./apps/${APP}/common"
+    populate
 fi
 
-[[ -f .eu4_location ]] \
-    && export EU_ROOT="$(cat .eu4_location)" \
-    || export EU_ROOT=
+echo "Populated ${(k)vars_done}"
+
+fail_if_not_populated() {
+    for var in "$@"; do
+        if [[ "${vars_done[$var]}" != "1" ]]; then
+            echo "Did not have $var"
+            exit 1
+        fi
+    done
+}
