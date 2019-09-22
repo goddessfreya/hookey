@@ -1,14 +1,14 @@
 #!/bin/zsh -x
 
+source ./common
+fail_if_not_populated APP APP_ROOT
+
 if [[ ! -d "apps/${APP}/dlc/" ]]; then
-    echo "Place dlcs in ./apps/{appname}/dlc folder (might have to create folder manually), and rerun script"
+    echo "Place dlcs in ./apps/${APP}/dlc folder (might have to create folder manually), and rerun script"
     exit
 fi
 
 ./install || exit $?
-source ./common
-
-fail_if_not_populated APP APP_ROOT
 
 [[ -d "${APP_ROOT}/dlc" ]] \
     && mv "${APP_ROOT}/dlc"{,.old}
