@@ -1,4 +1,5 @@
 apps/*/dlc/*
+!apps/*/dlc/INSERT_DLCS_HERE
 .install
 .installs
 *_local
