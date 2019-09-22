@@ -1,6 +1,6 @@
 #!/bin/zsh -x
 
-if [[ ! -d "apps/${APP}.dlc/" ]]; then
+if [[ ! -d "apps/${APP}/dlc/" ]]; then
     echo "Place dlcs in ./apps/{appname}/dlc folder (might have to create folder manually), and rerun script"
     exit
 fi
