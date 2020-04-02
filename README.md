@@ -11,6 +11,15 @@ order.
 
 ```
 $ git submodule update --init --recursive
+
+# Goldlab emulator uses `protoc` and `clang` to build the libraries:
+# On Ubuntu 19.10 or newer:
+
+$ sudo apt install protobuf-compiler clang
+
+# Additionally, you need zsh to run the scripts:
+
+$ sudo apt install zsh
 ```
 
 # 2- Add the game
