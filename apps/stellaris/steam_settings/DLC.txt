@@ -20,3 +20,7 @@
 844810=Stellaris: Distant Stars Story Pack
 944290=Stellaris: MegaCorp
 1045980=Stellaris: Ancient Relics Story Pack
+1140000=Stellaris: Lithoids Species Pack
+1140001=Stellaris: Federations
+1341520=Stellaris: Necroids Species Pack
+1522090=Stellaris: Nemesis
