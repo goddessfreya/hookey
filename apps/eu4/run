@@ -18,7 +18,6 @@ fi
 while read -r line; do
   # can't use 32bit due to error
   if [[ ! "$line" =~ "i386" ]]; then
-    echo "$line"
     LD_PRELOAD="$LOC" ./dowser;
     exit;
   fi
