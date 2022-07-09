@@ -9,9 +9,14 @@ Works with EU4, HOI4, Stellaris and CK2.
 Note: If you get SSH errors, make sure your gitlab (not github!) keys are in 
 order.
 
+
 ```
 $ git submodule update --init --recursive
 ```
+Follow the link below for a guide on setting up your gitlab shh key:
+
+https://docs.gitlab.com/ee/user/ssh.html#adding-an-ssh-key-to-your-gitlab-account
+
 
 # 2- Add the game
 
@@ -20,10 +25,10 @@ First run the following
 $ ./add "<game name>" "<path to game>"
 ```
 
-where `"<game name>"` is lowercase. E.g.
+where `"<game name>"` is lowercase and `"<path to game>"` is the main install directory. E.g.
 
 ```
-$ ./add "hoi4" "$(pwd)/hoi4_local"
+$ ./add "hoi4" "/path/to/your/Hearts-of-Iron-IV"
 ```
 
 Then select the game you added:
@@ -46,6 +51,7 @@ Then run this script:
 ```
 $ ./install_copy
 ```
+Make sure not to run as sudo or root for the script to work properly.
 
 # 3b- Non-steam Users
 
@@ -124,3 +130,14 @@ I personally never cared all too much for achievements, so so be it.
 
 This comes with some benefits, of course. Now Steam is not required to run in 
 the background!
+
+
+# I am having issues running the installation!
+
+First, make sure to check all errors when running; they provide the best clues to your issue. Here are a few suggestions on commonly encountered errors:
+###### "libc.so.6" errors
+- Make sure your `libc.so.6` file is present in your `/usr/lib/` directory, and that the `hookey/app/${APP}/run` file is correctly pointing to the correct lib.so.6 file.
+###### "Launcher not found, retrying" error
+- Ensure the variable `LAUNCHER_API_LOC` in your `hookey/app/${APP}/common` is pointing to the correct location for your paradoxlauncher, and that the version is correct.
+###### "protoc and make" error
+- Make sure to install the protobuf-compiler library using `sudo apt-get install protobuf-compiler`
