@@ -46,6 +46,7 @@ Then run this script:
 ```
 $ ./install_copy
 ```
+Make sure not to run as sudo or root for the script to work properly.
 
 # 3b- Non-steam Users
 
