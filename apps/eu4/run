@@ -4,4 +4,4 @@ source ./common
 fail_if_not_populated APP_ROOT
 
 cd "${APP_ROOT}"
-LD_PRELOAD="/usr/lib/libc.so.6" ./dowser
+LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libc.so.6" ./dowser
