@@ -10,7 +10,12 @@ vars[LAUNCHER_ROOT]=$'"$HOME/.paradoxlauncher"'
 var_types[LAUNCHER_ROOT]="eval"
 var_deps[LAUNCHER_ROOT]=$'()'
 
-vars[LAUNCHER_API_LOC]=$'"${LAUNCHER_ROOT}/${LAUNCHER_VERSION}/resources/app/dist/main"'
+vars[LAUNCHER_API_LOC]=""
+if [[ ! -d "${LAUNCHER_ROOT}/${LAUNCHER_VERSION}/resources/app/dist/main" ]]; then
+  vars[LAUNCHER_API_LOC]=$'"${LAUNCHER_ROOT}/${LAUNCHER_VERSION}/resources/app.asar.unpacked/dist/main"'
+else
+  vars[LAUNCHER_API_LOC]=$'"${LAUNCHER_ROOT}/${LAUNCHER_VERSION}/resources/app/dist/main"'
+fi
 var_types[LAUNCHER_API_LOC]="eval"
 var_deps[LAUNCHER_API_LOC]=$'(LAUNCHER_ROOT LAUNCHER_VERSION)'
 
