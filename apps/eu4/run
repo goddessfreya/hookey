@@ -4,4 +4,22 @@ source ./common
 fail_if_not_populated APP_ROOT
 
 cd "${APP_ROOT}"
-LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libc.so.6" ./dowser
+
+LOC=$(find /usr/lib -name "libc.so.6")
+
+if [[ -z "$LOC" ]]; then
+  LOC=$(find /lib -name "libc.so.6");
+  if [[ -z "$LOC" ]]; then
+    echo "ERROR: libc.so.6 file not found in standard directories"
+  fi
+fi
+
+# incase multiple instances found
+while read -r line; do
+  # can't use 32bit due to error
+  if [[ ! "$line" =~ "i386" ]]; then
+    echo "$line"
+    LD_PRELOAD="$LOC" ./dowser;
+    exit;
+  fi
+done <<< $LOC
