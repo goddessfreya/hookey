@@ -26,3 +26,4 @@
 1522090=Stellaris: Nemesis
 1749080=Stellaris: Aquatics Species Pack
 1889490=Stellaris: Overlord
+2115770=Stellaris: Toxoids Species Pack
